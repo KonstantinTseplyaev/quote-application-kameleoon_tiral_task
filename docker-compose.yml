@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  server:
+    build: ./quote-service
+    container_name: quote-server
+    ports:
+      - "9095:9095"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:h2:mem:testdb
+      - DB_USER=root
+      - DB_PASSWORD=root
+
+  gateway:
+    build: ./gateway-service
+    container_name: gateway-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
+    environment:
+      - SERVER_URL=http://server:9095
